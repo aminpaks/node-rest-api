@@ -1,6 +1,8 @@
+import bcrypt from 'bcrypt';
 import mongoose, { Model, Mongoose, Connection, Document } from 'mongoose';
 import { autoIncrement } from 'mongoose-plugin-autoinc';
 import { isDebugging } from '../utils/debugging';
+import { getSaltSync } from './salt';
 
 export interface UserRequestPayload {
   firstName: string;
@@ -10,7 +12,6 @@ export interface UserRequestPayload {
 }
 
 export interface IUser extends Document {
-  userId: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -20,7 +21,7 @@ export interface IUser extends Document {
 }
 
 const toJSON: mongoose.DocumentToObjectOptions = {
-  transform: (doc: any, { _id, ...rest }: any) => {
+  transform: (_doc: any, { _id, password, ...rest }: any) => {
     return { userId: String(_id), ...rest };
   },
   versionKey: isDebugging(),
@@ -32,12 +33,21 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      trim: true,
     },
+    // username: {
+    //   type: String,
+    //   unique: true,
+    //   required: true,
+    //   trim: true,
+    // },
     firstName: {
       type: String,
+      trim: true,
     },
     lastName: {
       type: String,
+      trim: true,
     },
     password: {
       type: String,
@@ -51,6 +61,19 @@ export const UserSchema = new mongoose.Schema(
     validateBeforeSave: true,
   },
 );
+
+UserSchema.pre<IUser>('save', function(next) {
+  const user = this;
+  try {
+    if (user.isNew) {
+      const hash = bcrypt.hashSync(user.password, 10);
+      user.password = hash;
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 
 // export class User {
 //   static findByEmail(email: string) {

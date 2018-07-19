@@ -3,7 +3,7 @@ export const dbUri =
 
 export const getURI = ({
   username,
-  password
+  password,
 }: {
   username: string;
   password: string;
@@ -13,6 +13,6 @@ export const defaultConfig = {
   secret: 'shouldbesomethinghere',
   db: {
     username: 'new-test-user-92',
-    password: 'WXxHJsWbNve1exap'
-  }
+    password: 'WXxHJsWbNve1exap',
+  },
 };

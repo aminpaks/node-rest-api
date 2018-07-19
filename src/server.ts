@@ -1,5 +1,7 @@
 import express from 'express';
 import helmet from 'helmet';
+import session from 'express-session';
+import { defaultConfig } from './config';
 
 const defaultPort = 8091;
 
@@ -13,6 +15,13 @@ export const startServer = async (app: express.Express, port = defaultPort) => {
         noCache: true,
         referrerPolicy: true,
         hidePoweredBy: true,
+      }),
+    )
+    .use(
+      session({
+        secret: defaultConfig.secret,
+        resave: true,
+        saveUninitialized: false,
       }),
     )
     .on('error', err => {
