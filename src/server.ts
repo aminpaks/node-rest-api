@@ -1,14 +1,22 @@
 import express from 'express';
+import helmet from 'helmet';
 
 const defaultPort = 8091;
 
 export const startServer = async (app: express.Express, port = defaultPort) => {
   app.listen(port, () => {
-    console.log(`Listening on port "${port}`);
+    console.log(`Server started and listening on port ${port}`);
   });
-
-  app.on('error', err => {
-    console.log('Express server error:', err);
-    process.exit(1);
-  });
+  app
+    .use(
+      helmet({
+        noCache: true,
+        referrerPolicy: true,
+        hidePoweredBy: true,
+      }),
+    )
+    .on('error', err => {
+      console.log('Express server error:', err);
+      process.exit(1);
+    });
 };

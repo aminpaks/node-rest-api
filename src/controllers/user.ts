@@ -1,52 +1,47 @@
 import { Router } from 'express';
-import BodyParser from 'body-parser';
-import { UserModel, UserRequestBody } from '../models/user';
+import bodyParser from 'body-parser';
+import { getUserModel, UserRequestPayload } from '../models/user';
+import { handleError } from '../utils/error-handler';
 
 export const userRoute = Router();
 
-userRoute.use(BodyParser.urlencoded({ extended: true }));
-userRoute.use(BodyParser.json());
+userRoute.use(bodyParser.urlencoded({ extended: true }));
+userRoute.use(bodyParser.json());
 
 userRoute.post('/', async (req, res) => {
-  const body = req.body as UserRequestBody;
-  const { name, email, password } = body;
+  const body = req.body as UserRequestPayload;
+  const { firstName, lastName, email, password } = body;
 
   try {
-    const user = await UserModel.create({
-      name,
+    const user = await getUserModel().create({
+      firstName,
+      lastName,
       email,
-      password
+      password,
     });
-    res.status(200).json(user);
+    res.json(user);
   } catch (error) {
-    res.status(500).json({
-      result: false,
-      error
-    });
+    handleError(error, res);
   }
 });
 
 userRoute.get('/', async (req, res) => {
-  const query = UserModel.find({});
+  const query = getUserModel().find({});
 
   try {
     const users = await query.exec();
-    res.status(200).json({
-      result: true,
-      users
-    });
+    res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({
-      result: false,
-      error
-    });
+    handleError(error, res);
   }
 });
 
 userRoute.get('/:userId', async (req, res) => {
   const { userId } = req.params;
 
-  const result = await UserModel.findById(userId).exec();
+  const result = await getUserModel()
+    .findById(userId)
+    .exec();
 
   res.status(200).send(result);
 });

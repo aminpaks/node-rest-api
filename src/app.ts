@@ -1,15 +1,18 @@
 import '@babel/polyfill';
 import express from 'express';
-import { connectToDB } from './db';
+import { getDbInstance } from './db';
 import { startServer } from './server';
 import { userRoute } from './controllers/user';
 
 const app = express();
-app.use('/users', userRoute);
 
-connectToDB()
-  .then(() => startServer(app))
+startServer(app)
+  .then(async () => {
+    await getDbInstance();
+
+    app.use('/users', userRoute);
+  })
   .catch(err => {
-    console.log('DB Connection', err);
+    console.log('Server could NOT start', err);
     process.exit(1);
   });

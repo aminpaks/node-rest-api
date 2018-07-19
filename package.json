@@ -9,6 +9,15 @@
     "debug": "nodemon --inspect ./build/app.js",
     "build": "babel src --out-dir build --extensions \".ts,.tsx\""
   },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "helmet": "^3.12.1",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.4",
+    "mongoose-plugin-autoinc": "^1.1.9",
+    "morgan": "^1.9.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.54",
     "@babel/core": "^7.0.0-beta.54",
@@ -19,12 +28,8 @@
     "@babel/preset-typescript": "^7.0.0-beta.54",
     "@babel/register": "^7.0.0-beta.54",
     "@types/express": "^4.16.0",
+    "@types/helmet": "0.0.38",
     "@types/mongoose": "^5.2.0",
     "typescript": "^2.9.1"
-  },
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "mongoose": "^5.2.4"
   }
 }

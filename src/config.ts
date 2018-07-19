@@ -1,15 +1,18 @@
-export const uriTemplate =
+export const dbUri =
   'mongodb+srv://${USER}:${PASS}@cluster0-test-a1nfz.gcp.mongodb.net/test?retryWrites=true';
 
 export const getURI = ({
   username,
-  password,
+  password
 }: {
   username: string;
   password: string;
-}) => uriTemplate.replace('${USER}', username).replace('${PASS}', password);
+}) => dbUri.replace('${USER}', username).replace('${PASS}', password);
 
-export const defaultCredential = {
-  username: 'new-test-user-92',
-  password: 'WXxHJsWbNve1exap',
+export const defaultConfig = {
+  secret: 'shouldbesomethinghere',
+  db: {
+    username: 'new-test-user-92',
+    password: 'WXxHJsWbNve1exap'
+  }
 };
