@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose, { Model, Mongoose, Connection, Document } from 'mongoose';
-import { autoIncrement } from 'mongoose-plugin-autoinc';
 import { isDebugging } from '../utils/debugging';
-import { getSaltSync } from './salt';
 
 export interface UserRequestPayload {
   firstName: string;
@@ -17,7 +15,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
 
-  findByEmail(email: string): IUser;
+  findByEmail(email: string): Promise<IUser>;
+  isPasswordValid(password: string): Promise<boolean>;
 }
 
 const toJSON: mongoose.DocumentToObjectOptions = {
@@ -65,23 +64,26 @@ export const UserSchema = new mongoose.Schema(
 UserSchema.pre<IUser>('save', function(next) {
   const user = this;
   try {
-    if (user.isNew) {
+    if (this.isModified('password') || user.isNew) {
       const hash = bcrypt.hashSync(user.password, 10);
       user.password = hash;
-      next();
+      return next();
     }
   } catch (err) {
-    next(err);
+    return next(err);
   }
 });
 
-// export class User {
-//   static findByEmail(email: string) {
-//     return (this as any).findOne({ email });
-//   }
-// }
-// UserSchema.loadClass(User);
-// UserSchema.plugin(autoIncrement, { model: 'user' });
+export class User {
+  findByEmail(email: string) {
+    return (this as any).findOne({ email }).exec();
+  }
+  isPasswordValid(password: string) {
+    const user = (this as any) as IUser;
+    return bcrypt.compareSync(password, user.password);
+  }
+}
+UserSchema.loadClass(User);
 
 let userModel: Model<IUser>;
 export const initUserModel = (connection: Connection) => {

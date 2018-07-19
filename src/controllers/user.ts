@@ -1,12 +1,8 @@
 import { Router } from 'express';
-import bodyParser from 'body-parser';
 import { getUserModel, UserRequestPayload } from '../models/user';
 import { handleError } from '../utils/error-handler';
 
 export const userRoute = Router();
-
-userRoute.use(bodyParser.urlencoded({ extended: true }));
-userRoute.use(bodyParser.json());
 
 userRoute.post('/', async (req, res) => {
   const body = req.body as UserRequestPayload;
