@@ -4,6 +4,15 @@ import { handleError } from '../utils/error-handler';
 
 export const userRoute = Router();
 
+userRoute.options('/', (_req, res) => {
+  res
+    .set({
+      Allow: 'OPTIONS, GET, POST',
+    })
+    .send()
+    .end();
+});
+
 userRoute.post('/', async (req, res) => {
   const body = req.body as UserRequestPayload;
   const { firstName, lastName, email, password } = body;

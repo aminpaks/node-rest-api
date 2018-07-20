@@ -15,7 +15,9 @@ export const isRequestAllowedBy = (
 
   const { baseUrl, url } = req;
   const validBaseURL = baseUrl || url;
-  const rulesByURL = rules.filter(rule => rule.url === validBaseURL);
+  const rulesByURL = rules.filter(
+    rule => rule.url === validBaseURL || rule.url === '*',
+  );
 
   if (rulesByURL.length > 0) {
     const rulesMethods = rulesByURL.reduce<string[]>((acc, rule) => {
@@ -24,9 +26,7 @@ export const isRequestAllowedBy = (
     }, []);
 
     if (rulesMethods.length > 0) {
-      const result = rulesMethods.some(method => req.method === method);
-      debugger;
-      return result;
+      return rulesMethods.some(method => req.method.toLowerCase() === method);
     }
 
     return true;

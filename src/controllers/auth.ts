@@ -9,6 +9,15 @@ import {
 
 export const authRoute = Router();
 
+authRoute.options('/', (_req, res) => {
+  res
+    .set({
+      Allow: 'OPTIONS, PATCH, POST',
+    })
+    .send()
+    .end();
+});
+
 authRoute.post('/', async (req, res) => {
   const body = req.body as AuthRequestPayload;
   const { email, password: enteredPassword } = body;
