@@ -26,6 +26,12 @@ $ npm run build
 
 We encourage you to use VSCode as your editor and install its Prettier extension.
 
+### Environment variables
+
+It's very simple to keep configuration values in a project. But it won't scale, we offer using `.env` files for your local
+development. It's `KEY=VALUE` file and once you start your project it will load them up. In production you just skip
+this file and set the variables manually.
+
 ### Start debug server
 
 Make sure you have Nodemon globally installed

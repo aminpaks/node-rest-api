@@ -3,17 +3,20 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
-import { defaultConfig } from './config';
-import { isProduction } from './utils';
+import { isProduction, getEnvVar } from './utils';
 
-const defaultPort = 8091;
+const serverPort = getEnvVar<number>('SERVER_PORT', 5000);
+const sessionSecret = getEnvVar<string>(
+  'SESSION_SECRET',
+  'set-a-default-value-here',
+);
 
-export const startServer = async (app: express.Express, port = defaultPort) => {
+export const startServer = async (app: express.Express, port = serverPort) => {
   app.listen(port, () => {
     console.log(`Server started and listening on port ${port}`);
   });
-  app.set('trust proxy', 1); // trust first proxy
   app
+    .set('trust proxy', 1) // trust first proxy
     .use(
       helmet({
         noCache: true,
@@ -23,8 +26,8 @@ export const startServer = async (app: express.Express, port = defaultPort) => {
     )
     .use(
       session({
-        secret: defaultConfig.secret,
         resave: true,
+        secret: sessionSecret,
         saveUninitialized: false,
       }),
     )
@@ -32,7 +35,6 @@ export const startServer = async (app: express.Express, port = defaultPort) => {
     .use(bodyParser.urlencoded({ extended: true }))
     .use(morgan(isProduction() ? 'common' : 'dev'))
     .on('error', err => {
-      console.log('Express server error:', err);
-      process.exit(1);
+      console.log('Uncaught server error.', err);
     });
 };

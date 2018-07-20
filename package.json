@@ -3,15 +3,16 @@
   "version": "0.7.0",
   "license": "MIT",
   "scripts": {
-    "prestart": "npm run build",
-    "start": "node ./build/app.js",
+    "start": "node start.js",
     "watch": "babel src --watch --out-dir build --source-maps inline --extensions \".ts,.tsx\"",
-    "debug": "nodemon --inspect ./build/app.js",
-    "build": "babel src --out-dir build --extensions \".ts,.tsx\""
+    "debug": "nodemon --inspect start.js",
+    "build": "babel src --out-dir build --extensions \".ts,.tsx\"",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "helmet": "^3.12.1",

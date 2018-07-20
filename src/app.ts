@@ -1,17 +1,14 @@
 import express from 'express';
-import { dbInitConnection, getDbInstance } from './db';
+import { dbInitConnection } from './db';
 import { startServer } from './server';
 import { userRoute, authRoute } from './controllers';
 import { authMiddleware, corsMiddleware } from './middlewares';
-import { getEnvVar } from './utils';
 
 const app = express();
-const serverPort = getEnvVar<number>('PORT');
-const dbURI = getEnvVar<undefined | string>('MONGODB_URI');
 
-startServer(app, serverPort)
+startServer(app)
   .then(async () => {
-    await dbInitConnection(dbURI);
+    await dbInitConnection();
 
     app
       .use(corsMiddleware)
@@ -34,6 +31,6 @@ startServer(app, serverPort)
       .use('/users', userRoute);
   })
   .catch(err => {
-    console.log('Server could NOT start', err);
+    console.log('Server cannot start.', err);
     process.exit(1);
   });

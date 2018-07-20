@@ -1,2 +1,8 @@
-/build
+# dependency folders
 /node_modules
+
+# build folders
+/build
+
+# env files
+.env

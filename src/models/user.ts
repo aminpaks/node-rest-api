@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import mongoose, { Model, Mongoose, Connection, Document } from 'mongoose';
+import mongoose, { Model, Connection, Document } from 'mongoose';
 import { isDebugging } from '../utils/debugging';
 
 export interface UserRequestPayload {
@@ -88,12 +88,6 @@ UserSchema.loadClass(User);
 let userModel: Model<IUser>;
 export const initUserModel = (connection: Connection) => {
   userModel = connection.model<IUser>('user', UserSchema);
-  // userModel
-  //   .remove({})
-  //   .exec()
-  //   .then(value => {
-  //     console.log('all rows delete', value);
-  //   });
 
   return userModel;
 };
