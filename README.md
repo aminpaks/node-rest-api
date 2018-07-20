@@ -34,8 +34,16 @@ Make sure you have Nodemon globally installed
 $ npm install --globally nodemon
 ```
 
-Then run:
+First run babel watch:
+
+```sh
+$ npm run watch
+```
+
+Then run the server:
 
 ```sh
 $ npm run debug
 ```
+
+And at the end attach the debugger by starting VSCode attach debug.

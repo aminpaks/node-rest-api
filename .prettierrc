@@ -13,6 +13,13 @@
         "parser": "json",
         "tabWidth": 2
       }
+    },
+    {
+      "files": ".*",
+      "options": {
+        "parser": "json",
+        "tabWidth": 2
+      }
     }
   ]
 }

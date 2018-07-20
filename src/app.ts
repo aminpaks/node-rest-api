@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import express from 'express';
 import { getDbInstance } from './db';
 import { startServer } from './server';
