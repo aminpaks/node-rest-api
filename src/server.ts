@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import { defaultConfig } from './config';
-import { isDebugging, isProduction } from './utils/debugging';
+import { isProduction } from './utils';
 
 const defaultPort = 8091;
 

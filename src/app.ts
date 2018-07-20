@@ -4,10 +4,12 @@ import { getDbInstance } from './db';
 import { startServer } from './server';
 import { userRoute, authRoute } from './controllers';
 import { authMiddleware, corsMiddleware } from './middlewares';
+import { getEnvVar } from './utils';
 
 const app = express();
+const serverPort = getEnvVar<number>('PORT');
 
-startServer(app)
+startServer(app, serverPort)
   .then(async () => {
     await getDbInstance();
 

@@ -4,6 +4,8 @@ Sample REST API built with TypeScript and Node.JS
 
 ## Install your dependencies
 
+First make sure you have at least Node.JS v9 and then install the dependencies.
+
 ```sh
 $ npm install
 ```
