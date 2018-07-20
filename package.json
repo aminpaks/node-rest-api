@@ -3,7 +3,7 @@
   "version": "0.7.0",
   "license": "MIT",
   "scripts": {
-    "preStart": "npm run build",
+    "prestart": "npm run build",
     "start": "node ./build/app.js",
     "watch": "babel src --watch --out-dir build --source-maps inline --extensions \".ts,.tsx\"",
     "debug": "nodemon --inspect ./build/app.js",
