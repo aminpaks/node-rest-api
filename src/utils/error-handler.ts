@@ -8,17 +8,28 @@ const getErrorMessage = (value: any) => {
   return value;
 };
 
+export interface RequestError {
+  status?: number;
+  message?: string;
+  localizedMessage?: string;
+  errorCode?: number;
+}
+
 export const handleError = (
-  debug: string | Object | Error,
   res: Response,
   {
     status = 500,
-    message = 'Server error',
-  }: { status?: number; message?: string } = {},
+    errorCode,
+    message = 'Internal server error',
+    localizedMessage,
+  }: RequestError,
+  debugInfo: undefined | string | Object | Error,
 ) =>
   res.status(status).json({
     error: {
       message,
-      ...(isDebugging() && { debug: getErrorMessage(debug) }),
+      errorCode,
+      localizedMessage,
+      ...(isDebugging() && debugInfo && { debug: getErrorMessage(debugInfo) }),
     },
   });

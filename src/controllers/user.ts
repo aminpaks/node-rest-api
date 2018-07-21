@@ -4,6 +4,11 @@ import { handleError } from '../utils/error-handler';
 
 export const userRoute = Router();
 
+const badRequestPayload = {
+  status: 400,
+  message: 'The request cannot be understood',
+};
+
 userRoute.options('/', (_req, res) => {
   res
     .set({
@@ -26,7 +31,7 @@ userRoute.post('/', async (req, res) => {
     });
     res.json(user);
   } catch (error) {
-    handleError(error, res);
+    handleError(res, badRequestPayload, error);
   }
 });
 
@@ -35,18 +40,23 @@ userRoute.get('/', async (req, res) => {
 
   try {
     const users = await query.exec();
-    res.status(200).json(users);
+
+    return res.status(200).json(users);
   } catch (error) {
-    handleError(error, res);
+    return handleError(res, badRequestPayload, error);
   }
 });
 
 userRoute.get('/:userId', async (req, res) => {
   const { userId } = req.params;
 
-  const result = await getUserModel()
-    .findById(userId)
-    .exec();
+  try {
+    const result = await getUserModel()
+      .findById(userId)
+      .exec();
 
-  res.status(200).send(result);
+    return res.status(200).send(result);
+  } catch (error) {
+    return handleError(res, badRequestPayload, error);
+  }
 });

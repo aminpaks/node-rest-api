@@ -37,18 +37,18 @@ MONGODB_URI='mongodb://username:password@domain:port/path'
 
 It's worth mentioning all these variables should be available for the production too either by an `.env` file or defining them directly in the shell.
 
-### Start debug server
+### Debugging
 
-Make sure you have Nodemon globally installed
+Make sure you have Nodemon globally installed:
 
 ```sh
 $ npm install --globally nodemon
 ```
 
-Then run the server:
+Then start dev script:
 
 ```sh
-$ npm run debug
+$ npm run dev
 ```
 
 And at the end attach the VSCode debugger to "Attach to Debugger" and you should be able to nicely debug the code.

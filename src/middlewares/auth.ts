@@ -34,14 +34,11 @@ export const authMiddleware: IAuthMiddleware = rules => async (
   }
 
   return handleError(
-    {
-      by: 'Authentication middleware',
-      reason: 'Invalid token',
-    },
     res,
     {
       status: 403,
       message: 'Access denied',
     },
+    'Invalid token',
   );
 };

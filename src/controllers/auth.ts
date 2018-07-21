@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { partial } from 'lodash';
 import { AuthRequestPayload, getUserModel } from '../models';
 import {
   getBearerToken,
@@ -25,6 +26,7 @@ authRoute.post('/', async (req, res) => {
     status: 403,
     message: 'Invalid email or password',
   };
+  const handleErrorCurried = partial(handleError, res);
 
   try {
     try {
@@ -48,17 +50,16 @@ authRoute.post('/', async (req, res) => {
           throw new Error('Password does NOT match');
         }
       }
-    } catch (err) {
-      return handleError(err, res, standardAccessDenied);
+    } catch (error) {
+      return handleErrorCurried(standardAccessDenied, error);
     }
   } catch (error) {
-    return handleError(error, res, standardAccessDenied);
+    return handleErrorCurried(standardAccessDenied, error);
   }
 
-  return handleError(
-    new Error('Could not finish authentication'),
-    res,
+  return handleErrorCurried(
     standardAccessDenied,
+    new Error('Could not finish authentication process'),
   );
 });
 
@@ -75,8 +76,12 @@ authRoute.patch('/', async (req, res) => {
       });
     }
   }
-  return handleError(new Error(`Invalid token: ${token}`), res, {
-    status: 403,
-    message: 'Invalid token',
-  });
+  return handleError(
+    res,
+    {
+      status: 403,
+      message: 'Invalid token',
+    },
+    new Error(`Invalid token: ${token}`),
+  );
 });

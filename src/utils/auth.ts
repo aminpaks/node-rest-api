@@ -18,10 +18,11 @@ export const isRequestAllowedBy = (
   const rulesByURL = rules.filter(
     rule => rule.url === validBaseURL || rule.url === '*',
   );
+  const allMethods = ['get', 'post', 'patch', 'put', 'delete', 'options'];
 
   if (rulesByURL.length > 0) {
     const rulesMethods = rulesByURL.reduce<string[]>((acc, rule) => {
-      const { methods } = rule;
+      const { methods = allMethods } = rule;
       return [...acc, ...(methods && methods.length > 0 ? methods : [])];
     }, []);
 
