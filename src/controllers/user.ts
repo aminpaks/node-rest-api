@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import { getUserModel, UserRequestPayload } from '../models/user';
-import { handleError } from '../utils/error-handler';
+import {
+  handleError,
+  handleValidationError,
+  BaseError,
+  BaseErrorResponseModel,
+} from '../utils';
 
 export const userRoute = Router();
 
-const badRequestPayload = {
-  status: 400,
+const badRequestPayload: BaseErrorResponseModel & Partial<BaseError> = {
+  status: 404,
   message: 'The request cannot be understood',
 };
 
@@ -29,9 +34,17 @@ userRoute.post('/', async (req, res) => {
       email,
       password,
     });
-    res.json(user);
+    return res.json(user);
   } catch (error) {
-    handleError(res, badRequestPayload, error);
+    switch (error.name) {
+      case 'ValidationError':
+        return handleValidationError(res, error, {
+          causedBy: __filename,
+          details: 'User model validation failure',
+        });
+      default:
+        return handleError(res, badRequestPayload, error);
+    }
   }
 });
 
@@ -41,7 +54,7 @@ userRoute.get('/', async (req, res) => {
   try {
     const users = await query.exec();
 
-    return res.status(200).json(users);
+    return res.json(users);
   } catch (error) {
     return handleError(res, badRequestPayload, error);
   }
@@ -55,7 +68,7 @@ userRoute.get('/:userId', async (req, res) => {
       .findById(userId)
       .exec();
 
-    return res.status(200).send(result);
+    return res.send(result);
   } catch (error) {
     return handleError(res, badRequestPayload, error);
   }

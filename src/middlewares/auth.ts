@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { handleError } from '../utils/error-handler';
+import { handleError } from '../utils';
 import {
   getBearerToken,
   isRequestAllowedBy,

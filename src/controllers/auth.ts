@@ -2,10 +2,12 @@ import { Router } from 'express';
 import { partial } from 'lodash';
 import { AuthRequestPayload, getUserModel } from '../models';
 import {
+  BaseError,
+  BaseErrorResponseModel,
   getBearerToken,
-  jwtValidateToken,
   handleError,
   jwtSignPayload,
+  jwtValidateToken,
 } from '../utils';
 
 export const authRoute = Router();
@@ -22,7 +24,7 @@ authRoute.options('/', (_req, res) => {
 authRoute.post('/', async (req, res) => {
   const body = req.body as AuthRequestPayload;
   const { email, password: enteredPassword } = body;
-  const standardAccessDenied = {
+  const standardAccessDenied: BaseErrorResponseModel & Partial<BaseError> = {
     status: 403,
     message: 'Invalid email or password',
   };

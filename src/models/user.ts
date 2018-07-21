@@ -34,12 +34,12 @@ export const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    // username: {
-    //   type: String,
-    //   unique: true,
-    //   required: true,
-    //   trim: true,
-    // },
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+    },
     firstName: {
       type: String,
       trim: true,
@@ -59,6 +59,15 @@ export const UserSchema = new mongoose.Schema(
     collection: 'User',
     validateBeforeSave: true,
   },
+);
+
+// Turns email & username to be index
+UserSchema.index(
+  {
+    email: 1,
+    username: 1,
+  },
+  { index: true },
 );
 
 UserSchema.pre<IUser>('save', function(next) {
