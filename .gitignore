@@ -1,8 +1,8 @@
-# dependency folders
+# dependency directories
 /node_modules
-
-# build folders
-/build
 
 # env files
 .env
+
+# misc/old directors/files
+/build

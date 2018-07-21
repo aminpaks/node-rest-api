@@ -1,6 +1,11 @@
 import jwt, { SignOptions, VerifyErrors } from 'jsonwebtoken';
-import { defaultConfig } from '../config';
 import { JWTPayload } from '../models';
+import { getEnvVar } from './env';
+
+const jwtSecret = getEnvVar<string>(
+  'JWT_SECRET',
+  'default-secret-must-be-replaced',
+);
 
 export interface JWTResolve<T> {
   isValid: boolean;
@@ -11,7 +16,7 @@ export const jwtValidateToken = <T = JWTPayload>(
   token: string,
 ): Promise<JWTResolve<T>> =>
   new Promise(resolve => {
-    jwt.verify(token, defaultConfig.secret, (err: VerifyErrors, value: any) => {
+    jwt.verify(token, jwtSecret, (err: VerifyErrors, value: any) => {
       return resolve({
         isValid: Boolean(err) === false,
         value,
@@ -22,5 +27,4 @@ export const jwtValidateToken = <T = JWTPayload>(
 export const jwtSignPayload = (
   payload: string | object,
   options?: SignOptions,
-): string =>
-  jwt.sign(payload, defaultConfig.secret, { expiresIn: '1 day', ...options });
+): string => jwt.sign(payload, jwtSecret, { expiresIn: '1 day', ...options });

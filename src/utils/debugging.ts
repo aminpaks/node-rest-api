@@ -1,11 +1,6 @@
-export const isProduction = () => {
-  const { NODE_ENV = 'development' } = process.env;
+import { getEnvVar } from './env';
 
-  return NODE_ENV === 'production';
-};
+export const isProduction = () =>
+  getEnvVar<string>('NODE_ENV', 'development') === 'production';
 
-export const isDebugging = () => {
-  const { DEBUG = false } = process.env;
-
-  return DEBUG === true;
-};
+export const isDebugging = () => getEnvVar<boolean>('DEBUG', false) === true;

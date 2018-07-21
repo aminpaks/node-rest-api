@@ -1,13 +1,10 @@
 {
-  "name": "babel-typescript-sample",
-  "version": "0.7.0",
+  "name": "rest-api-sample",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "start": "node start.js",
-    "watch": "babel src --watch --out-dir build --source-maps inline --extensions \".ts,.tsx\"",
-    "debug": "nodemon --inspect start.js",
-    "build": "babel src --out-dir build --extensions \".ts,.tsx\"",
-    "postinstall": "npm run build"
+    "debug": "nodemon --inspect start.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",

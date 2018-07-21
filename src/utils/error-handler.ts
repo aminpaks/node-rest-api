@@ -19,6 +19,6 @@ export const handleError = (
   res.status(status).json({
     error: {
       message,
-      ...(isDebugging && { debug: getErrorMessage(debug) }),
+      ...(isDebugging() && { debug: getErrorMessage(debug) }),
     },
   });

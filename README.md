@@ -16,12 +16,6 @@ $ npm install
 $ npm start
 ```
 
-### Transpile to ES5 for Node.JS
-
-```sh
-$ npm run build
-```
-
 ## Development
 
 We encourage you to use VSCode as your editor and install its Prettier extension.
@@ -32,6 +26,17 @@ It's very simple to keep configuration values in a project. But it won't scale, 
 development. It's `KEY=VALUE` file and once you start your project it will load them up. In production you just skip
 this file and set the variables manually.
 
+Your local `.env` file would look like this:
+
+```json
+DEBUG=true
+NODE_ENV='development'
+SERVER_PORT=5000
+MONGODB_URI='mongodb://username:password@domain:port/path'
+```
+
+It's worth mentioning all these variables should be available for the production too either by an `.env` file or defining them directly in the shell.
+
 ### Start debug server
 
 Make sure you have Nodemon globally installed
@@ -40,16 +45,10 @@ Make sure you have Nodemon globally installed
 $ npm install --globally nodemon
 ```
 
-First run babel watch:
-
-```sh
-$ npm run watch
-```
-
 Then run the server:
 
 ```sh
 $ npm run debug
 ```
 
-And at the end attach the debugger by starting VSCode attach debug.
+And at the end attach the VSCode debugger to "Attach to Debugger" and you should be able to nicely debug the code.
