@@ -5,11 +5,8 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import { isProduction, getEnvVar } from './utils';
 
-const serverPort = getEnvVar<number>('SERVER_PORT', 5000);
-const sessionSecret = getEnvVar<string>(
-  'SESSION_SECRET',
-  'set-a-default-value-here',
-);
+const serverPort = getEnvVar('SERVER_PORT', 5000);
+const sessionSecret = getEnvVar('SESSION_SECRET', 'set-a-default-value-here');
 
 export const startServer = async (app: express.Express, port = serverPort) => {
   app.listen(port, () => {

@@ -3,7 +3,7 @@ import { initUserModel } from './models/user';
 import { getEnvVar } from './utils';
 
 let instance: undefined | Mongoose;
-const dbURI = getEnvVar<undefined | string>('MONGODB_URI');
+const dbURI = getEnvVar<string>('MONGODB_URI');
 
 export const dbInitConnection = async (uri = dbURI) => {
   if (!uri) {
