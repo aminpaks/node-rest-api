@@ -6,7 +6,7 @@
     "postinstall": "npm run build",
     "start": "node start.js",
     "prestart": "npm run type-check",
-    "dev": "npm-run-all -p -c build:watch debug",
+    "dev": "npm-run-all \"build -- --source-maps inline\" -p -c debug build:watch",
     "type-check": "tsc",
     "debug": "nodemon --inspect start.js",
     "build": "babel src --out-dir build --extensions \".ts\"",
@@ -23,7 +23,8 @@
     "lodash-es": "^4.17.10",
     "mongoose": "^5.2.4",
     "mongoose-plugin-autoinc": "^1.1.9",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "pluralize": "^7.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.54",

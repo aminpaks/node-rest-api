@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from 'mongoose';
 import { initUserModel } from './models/user';
 import { getEnvVar } from './utils';
+import { initPermissionModel, initPermissionRelationModel } from './models';
 
 let instance: undefined | Mongoose;
 const dbURI = getEnvVar<string>('MONGODB_URI');
@@ -16,6 +17,8 @@ export const dbInitConnection = async (uri = dbURI) => {
     { useNewUrlParser: true },
   );
   console.log('MongoDB connection established.', uri);
+  initPermissionModel(instance.connection);
+  initPermissionRelationModel(instance.connection);
   initUserModel(instance.connection);
 
   return instance;

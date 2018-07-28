@@ -1,32 +1,19 @@
 import express from 'express';
-import { dbInitConnection } from './db';
+import { dbInitConnection, initAllModels } from './db';
 import { startServer } from './server';
 import { userRoute, authRoute } from './controllers';
-import { authMiddleware, corsMiddleware } from './middlewares';
+import { corsMiddleware, jwtMiddleware } from './middlewares';
 
 const app = express();
 
 startServer(app)
   .then(async () => {
-    await dbInitConnection();
+    const dbInstance = await dbInitConnection();
+    await initAllModels(dbInstance.connection);
 
     app
       .use(corsMiddleware)
-      .use(
-        authMiddleware([
-          {
-            url: '*',
-            methods: ['options'],
-          },
-          {
-            url: '/auth',
-          },
-          {
-            url: '/users',
-            methods: ['post'],
-          },
-        ]),
-      )
+      .use(jwtMiddleware)
       .use('/auth', authRoute)
       .use('/users', userRoute);
   })

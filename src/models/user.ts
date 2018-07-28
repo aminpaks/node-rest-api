@@ -1,5 +1,10 @@
 import bcrypt from 'bcrypt';
-import mongoose, { Model, Connection, Document } from 'mongoose';
+import mongoose, {
+  Model,
+  Connection,
+  Document,
+  DocumentToObjectOptions,
+} from 'mongoose';
 import { isDebugging } from '../utils/debugging';
 
 export interface UserRequestPayload {
@@ -9,17 +14,21 @@ export interface UserRequestPayload {
   password: string;
 }
 
-export interface IUser extends Document {
+export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+}
 
-  findByEmail(email: string): Promise<IUser>;
+export interface IUserDoc extends Document, IUser {
+  findByEmail(email: string): Promise<IUserDoc>;
   isPasswordValid(password: string): Promise<boolean>;
 }
 
-const toJSON: mongoose.DocumentToObjectOptions = {
+export type IUserModel = Model<IUserDoc>;
+
+const toJSON: DocumentToObjectOptions = {
   transform: (_doc: any, { _id, password, ...rest }: any) => {
     return { userId: String(_id), ...rest };
   },
@@ -70,7 +79,7 @@ UserSchema.index(
   { index: true },
 );
 
-UserSchema.pre<IUser>('save', function(next) {
+UserSchema.pre<IUserDoc>('save', function(next) {
   const user = this;
   try {
     if (this.isModified('password') || user.isNew) {
@@ -88,15 +97,15 @@ export class User {
     return (this as any).findOne({ email }).exec();
   }
   isPasswordValid(password: string) {
-    const user = (this as any) as IUser;
+    const user = (this as any) as IUserDoc;
     return bcrypt.compareSync(password, user.password);
   }
 }
 UserSchema.loadClass(User);
 
-let userModel: Model<IUser>;
+let userModel: Model<IUserDoc>;
 export const initUserModel = (connection: Connection) => {
-  userModel = connection.model<IUser>('user', UserSchema);
+  userModel = connection.model<IUserDoc>('User', UserSchema);
 
   return userModel;
 };
